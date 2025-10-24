@@ -1,0 +1,27 @@
+project:
+  type: website
+  output-dir: docs
+
+website:
+  title: "The University of British Columbia"
+  repo-url: https://github.com/alexrod61/MEDI504-basic-biostats-2024
+  repo-actions: [source]
+  navbar:
+    left:
+      - href: index.qmd
+        text: Home
+
+  sidebar:
+    style: "docked"
+    search: true
+    contents:
+      - section: "Slides"
+        contents:
+          - slides/MEDI504-basic-biostats-2025.qmd
+
+format:
+  html:
+    theme: cosmo
+    css: styles.css
+    toc: true
+    fontsize: 1.5em

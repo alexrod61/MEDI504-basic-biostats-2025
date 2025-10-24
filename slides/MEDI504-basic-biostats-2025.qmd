@@ -1,0 +1,657 @@
+---
+title: "Lecture 2"
+subtitle: "Introduction to Biostatistics"
+author: G. Alexi Rodríguez-Arelis
+institute: "Department of Statistics, Faculty of Science at UBC"
+format: 
+  revealjs:
+    logo: img/ubc-logo-2018-fullsig.png
+    css: styles.css
+    footer: MEDI 504A - Emerging Topics in Experimental Medicine
+    slide-number: true
+    slide-level: 4
+    transition: none
+include-in-header:
+  text: |
+    <style>
+    #title-slide > .title {
+      color: darkblue;
+    }
+    </style>
+---
+
+# <span style="color: darkblue;">Attribution
+
+> This lecture is based on previous material from Gabriela Cohen Freue and Tiffany Timbers from the Department of Statistics at UBC.
+
+## <span style="color: darkblue;">Something about me...
+
+![](img/UBC-MDS-logo.png){.absolute top=-100 right=-60 height="170"}
+
+- I am an Assistant Professor of Teaching in the Department of Statistics at UBC.
+- My graduate teaching is focused on the  <span style="color: purple;">Master of Data Science</span>, specifically in statistics.
+- My undergraduate teaching has been mainly focused on  <span style="color: purple;">scientific communication</span>.
+- My website: [https://alexrod.netlify.app](https://alexrod.netlify.app)
+- My email: <span style="color: darkblue;">alexrod@stat.ubc.ca</span>
+
+
+# <span style="color: darkblue;">Agenda</span>
+
+1. Module learning objectives
+2. What is the question?
+3. So you know the type of question...
+4. Practice
+5. The statistical landscape in `R`
+6. Example of an inferential analysis in `R`
+7. Summary
+
+## <span style="color: darkblue;">1. Module learning objectives</span>
+
+By the end of this module, you should be able to:
+
+::: incremental
+- Identify the  <span style="color: purple;">different types of data analysis questions</span> and categorize a question into the correct type.
+- Identify a  <span style="color: purple;">suitable analysis type</span> to answer an  <span style="color: purple;">inferential question</span>, given the data set at hand.
+- Use the `R` programming language to carry out analysis to answer inferential questions.
+- <span style="color: purple;">Interpret and communicate the results</span> of the analysis from an inferential question.
+:::
+
+## <span style="color: darkblue;">2. What is the question?</span>
+
+![The data analysis question type flow chart ([Leek and Peng, 2020](https://jtleek.com/ads2020/week-1.html#types-of-data-analytic-questions)). ](https://jtleek.com/ads2020/images/week1/questions.png){height="450"}
+
+### <span style="color: darkblue;">2.1. Descriptive</span>
+
+- One that seeks to <span style="color: purple;">summarize</span> a characteristic of a set of data. 
+- <span style="color: purple;">No interpretation</span> of any summarized result is needed.
+
+. . .
+
+- For instance, we can compute <span style="color: purple;">the average of any given variable in our dataset</span>. 
+- If we <span style="color: purple;">do not interpret</span> this average with respect to other data attributes, then our inquiry is merely descriptive.
+
+![](img/data.png){fig-align="center" height=150}
+
+#### <span style="color: darkblue;">Further descriptive examples</span>
+
+- What is the frequency of viral illnesses <span style="color: purple;">in a set of data</span> collected from a group of individuals?
+- <span style="color: purple;">How many people</span> live in each US state?
+
+![](img/people.png){fig-align="center" height=350}
+
+### <span style="color: darkblue;">2.2. Exploratory</span>
+
+- One in which you analyze the data to see <span style="color: purple;">if there are patterns, trends, or relationships</span> between variables.
+- This inquiry looks for patterns that would support proposing <span style="color: purple;">a hypothesis to test in a future study</span>.
+- Nevertheless, any exploratory insights <span style="color: purple;">would be limited</span> to the data at hand.
+
+![](img/exploratory.png){fig-align="center" height=200}
+
+#### <span style="color: darkblue;">Exploratory examples</span>
+
+- Do diets rich in certain foods have differing frequencies of viral illnesses <span style="color: purple;">in a set of data</span> collected from a group of individuals?
+- Does air pollution correlate with life expectancy <span style="color: purple;">in a set of data</span> collected from groups of individuals from several regions in the United States?
+
+![](img/pollution.png){fig-align="center" height=250}
+
+### <span style="color: darkblue;">2.3. Inferential</span>
+
+- One in which you analyze the data to see if there are patterns, trends, or relationships between variables in <span style="color: purple;">a representative sample of a population of interest</span>. 
+- We want to quantify how much the patterns, trends, or relationships between variables apply <span style="color: purple;">to all individual units in the population</span>. 
+
+. . .
+
+- This class of inquiries would require formal statistical tools such as <span style="color: purple;">hypothesis testing or regression modelling</span>.
+
+#### <span style="color: darkblue;">Inferential examples</span>
+
+- Is eating at least 5 servings a day of fresh fruit and vegetables <span style="color: purple;">associated</span> with fewer viral illnesses per year?
+- Is the gestational length of first born babies <span style="color: purple;">the same as</span> that of non-first borns?
+
+![](img/control.png){fig-align="center" height=250}
+
+### <span style="color: darkblue;">2.4. Causal</span>
+
+- This inquiry asks about whether changing one factor will change another factor, on average, <span style="color: purple;">in a population</span>. 
+- Sometimes, the underlying design of the data collection, by default, allows you to answer a causal question (e.g., <span style="color: purple;">randomized experiment or trial</span>).
+
+![](img/population.png){fig-align="center" height=250}
+
+#### <span style="color: darkblue;">However...</span>
+
+- In other cases, the data collection <span style="color: purple;">does not allow</span> the analysis to establish any causality. 
+- In particular, in observational studies, treatments <span style="color: purple;">are not controlled</span> by design! 
+- <span style="color: purple;">Observed confounders</span> can be included in the analysis but <span style="color: purple;">unobserved ones</span> usually exist. Thus, causal effects cannot be naively established.
+
+![](img/clinical-trial.png){fig-align="center" height=150}
+
+#### <span style="color: darkblue;">Causal examples</span>
+
+- Does eating at least 5 servings a day of fresh fruit and vegetables <span style="color: purple;">cause</span> fewer viral illnesses per year?
+- Does smoking <span style="color: purple;">cause</span> cancer in BC elderly population?
+
+. . .
+
+> <span style="color: purple;">**Note:**</span> Designing an experiment where people are forced to smoke will be unethical! Observational data is often used in this case.
+
+![](img/randomized-trial.png){fig-align="center" height=150}
+
+### <span style="color: darkblue;">2.5. Mechanistic</span>
+
+- One that tries to explain the <span style="color: purple;">underlying mechanism</span> of the observed patterns, trends, or relationship (<span style="color: purple;">i.e., how does it happen?</span>).
+
+![](img/gears.png){fig-align="center" height=300}
+
+#### <span style="color: darkblue;">Mechanistic examples</span>
+
+- How do changes in diet <span style="color: purple;">help</span> to a reduction in the number of viral illnesses?
+- How does airplane wing <span style="color: purple;">design</span> changes air flow over a wing, leading to decreased drag?
+
+![](img/robot.png){fig-align="center" height=300}
+
+### <span style="color: darkblue;">Challenge 1</span>
+
+- What kind of statistical question is this?
+
+> Is a yet undiagnosed patient's breast cancer tumor malignant or benign?
+
+. . .
+
+**Answer:**
+
+> It is <span style="color: purple;">predictive</span>. Given some observed previous data, we would need <span style="color: purple;">to train a statistical or machine learning model</span> and use the modelling estimates to deliver a <span style="color: purple;">diagnosis prediction</span> conditioned on the patient characteristics.
+
+### <span style="color: darkblue;">Challenge 2</span>
+
+- What kind of statistical question is this?
+
+> Is inhalation of marijuana associated with lung cancer?
+
+. . .
+
+**Answer:**
+
+> It is <span style="color: purple;">inferential</span> since the question above aims to quantify an <span style="color: purple;">association</span> between two variables of interest: inhaling marijuana versus lung cancer (both are binary, i.e., **yes** or **no**).
+
+### <span style="color: darkblue;">Challenge 3</span>
+
+- What kind of statistical question is this?
+
+> Does a truncation of the BRCA2 gene cause cancer?
+
+. . .
+
+**Answer:**
+
+> It is <span style="color: purple;">causal</span>, not just because of the word "*cause*" but also for the <span style="color: purple;">context of the question</span>. A gene truncation involves <span style="color: purple;">a experimental study</span> to check whether there is an outcome from this study: <span style="color: purple;">cancer appearance</span>.
+
+### <span style="color: darkblue;">Challenge 4</span>
+
+- What kind of statistical question is this?
+
+> Are there sub-types of ovarian tumors?
+
+. . .
+
+**Answer:**
+
+> It is <span style="color: purple;">descriptive</span>. We merely seek to <span style="color: purple;">summarize</span> a given information in our dataset, which might be contained in a column called `Type of Ovarian Tumor`. That said, we are not seeking to make <span style="color: purple;">any further interpretations</span> on these summarized data in the context of this inquiry.
+
+## <span style="color: darkblue;">3. So you know the type of question...</span>
+
+<br>
+
+![](img/panda.png){fig-align="center" height=400}
+
+### <span style="color: darkblue;">3.1. What is next?</span>
+
+- This helps <span style="color: purple;">narrowing down</span> the possibilities of the <span style="color: purple;">kind of analysis</span> you might want to do!
+
+. . .
+
+- For example, if you have the question: 
+
+> How many viral illnesses will someone have next year? 
+
+- And you identify that it is <span style="color: purple;">predictive</span>, you could narrow down that some kind of <span style="color: purple;">statistical or machine learning model</span> might help you answer that.
+
+#### <span style="color: darkblue;">Then...</span>
+
+- You would need to go a <span style="color: purple;">step deeper</span> and look at the data that you have, and see which kind of <span style="color: purple;">statistical or machine learning model</span> is most suitable for your data.
+
+. . .
+
+- We can use some hand <span style="color: purple;">modelling toolboxes</span>:
+  + The [**scikit-learn algorithm**](https://scikit-learn.org/stable/machine_learning_map.html) cheat sheet for predictive inquiries.
+  + The [**regression mind map**](https://ubc-mds.github.io/DSCI_562_regr-2/notes/appendix-reg-mindmap.html) for inferential, causal, and predictive inquiries.
+
+#### <span style="color: darkblue;">Another example</span>
+
+- If you have the question: 
+
+> Is the gestational length of first born babies the same as that of non-first borns in Vancouver Island?
+
+. . .
+
+- And you identify that it is <span style="color: purple;">inferential</span>. You could narrow down that some kind of statistical inference approach might help you answer that.
+
+![](img/baby.png){fig-align="center" height=130}
+
+### <span style="color: darkblue;">3.2. Then, again...</span>
+
+- You need to go a step deeper and look at the data that you have, and see which kind of <span style="color: purple;">statistical inference approach</span> is the most suitable for your data.
+
+![**Source:** [Summer 2019 Statistics Workshop, Osborne Nishimura Lab. ](https://onishlab.colostate.edu/summer-statistics-workshop-2019/)](img/test-diagram.png){fig-align="center" height=330}
+
+## <span style="color: darkblue;">4. Practice</span>
+
+<br>
+
+![](img/notebook.png){fig-align="center" height=450}
+
+### <span style="color: darkblue;">4.1. Case 1</span>
+
+- **Question:** 
+
+> Is a yet undiagnosed patient's breast cancer tumor malignant or benign?
+
+. . .
+
+- We can approach the above <span style="color: purple;">predictive</span> inquiry via the <span style="color: purple;">Wisconsin Breast Cancer Database</span> and a <span style="color: purple;">binary logistic regression model</span> which would allow to include additional features.
+
+#### <span style="color: darkblue;">The Wisconsin Breast Cancer Database</span>
+
+- The original dataset, from [Wolberg and Mangasarian (1990)](https://pmc.ncbi.nlm.nih.gov/articles/PMC55130/pdf/pnas01048-0130.pdf), can be found in the [**UC Irvine Machine Learning Repository**](https://archive.ics.uci.edu/dataset/15/breast+cancer+wisconsin+original).
+- The `R` package [{mlbench}](https://www.rdocumentation.org/packages/mlbench/versions/2.1-5/topics/BreastCancer) contains a copy of this dataset.
+- An illustration of this dataset (whose $n = 699$) can be seen below.
+
+```{r}
+#| echo: false
+
+library(kableExtra)
+library(tidyverse)
+
+breast_cancer_dataset <- tribble(
+  ~ID, ~Radius, ~Texture, ~Perimeter, ~Area, ~Smoothness, ~Class,
+  926125, 1.9275296, 1.3485941, 2.1001278, 1.9667039, 0.9627130, "M",
+  926424, 2.1091388, 0.7208383, 2.0589739, 2.3417954, 1.0409262, "M",
+  926682, 1.7033556, 2.0833009, 1.6145108, 1.7223261, 0.1023682, "M",
+  926954, 0.7016669, 2.0437755, 0.6720844, 0.5774446, -0.8397450, "M",
+  927241, 1.8367249, 2.3344032, 1.9807813, 1.7336925, 1.5244257, "M",
+  92751, -1.8068114, 1.2207179, -1.8127934, -1.3466044, -3.1093489, "B"
+)
+
+breast_cancer_dataset <- kable(breast_cancer_dataset,
+  align = "ccccccc"
+) %>%
+  kable_styling(font_size = 20)
+breast_cancer_dataset
+```
+
+### <span style="color: darkblue;">4.2. Case 2</span>
+
+- **Question:** 
+
+> Is inhalation of marijuana associated with lung cancer?
+
+. . .
+
+- We can approach the above <span style="color: purple;">inferential</span> inquiry via a <span style="color: purple;">$\chi^2$ test</span>. Or a <span style="color: purple;">binary logistic regression model</span> which would allow to include additional features.
+
+#### <span style="color: darkblue;">Some simulated data</span>
+
+<br>
+
+```{r}
+#| echo: false
+
+marijuana_dataset <- tribble(
+  ~ID, ~sex, ~gender, ~age, ~smoker, ~marijuana_use, ~bmi, ~lung_cancer,
+  52343, "male", "fluid", 35, 1, "never", 22.3, 0,
+  59726, "male", "male", 43, 0, "frequent", 18.0, 0,
+  58030, "male", "male", 29, 0, "sometimes", 32.5, 1,
+  58890, "female", "female", 54, 0, "frequent", 20.0, 0,
+  55325, "female", "female", 37, 0, "never", 26.1, 0,
+  59145, "male", "male", 51, 0, "never", 29.8, 1
+)
+
+marijuana_dataset <- kable(marijuana_dataset,
+  col.names = c(
+    "ID", "Sex", "Gender", "Age", "Smoker",
+    "Marijuana Use", "BMI", "Lung Cancer"
+  ),
+  align = "cccccccc"
+) %>%
+  kable_styling(font_size = 33)
+marijuana_dataset
+```
+
+
+### <span style="color: darkblue;">4.3. Case 3</span>
+
+- **Question:** 
+
+> Does a truncation of the BRCA2 gene cause cancer?
+
+. . .
+
+- We can approach the above <span style="color: purple;">inferential</span> inquiry via a <span style="color: purple;">$\chi^2$ test</span>. Or a <span style="color: purple;">binary logistic regression model</span> which would allow to include additional features.
+
+#### <span style="color: darkblue;">Some simulated data</span>
+
+<br>
+
+```{r}
+#| echo: false
+
+BRCA2_dataset <- tribble(
+  ~ID, ~sex, ~gender, ~age, ~smoker, ~bmi, ~brca2_truncation, ~cancer,
+  26278, "male", "fluid", 35, 1, 22.3, 1, 0,
+  24264, "male", "male", 43, 0, 18.0, 0, 0,
+  23233, "male", "male", 29, 0, 32.5, 1, 1,
+  28287, "female", "female", 54, 0, 20.0, 0, 1,
+  25206, "female", "female", 37, 0, 26.1, 0, 0,
+  29266, "male", "male", 51, 0, 29.8, 0, 1
+)
+
+BRCA2_dataset <- kable(BRCA2_dataset,
+  col.names = c(
+    "ID", "Sex", "Gender", "Age", "Smoker",
+    "BMI", "BRCA2 Truncation", "Cancer"
+  ),
+  align = "cccccccc"
+) %>%
+  kable_styling(font_size = 33)
+BRCA2_dataset
+```
+
+### <span style="color: darkblue;">4.4. Case 4</span>
+
+- **Question:** 
+
+> Are there sub-types of ovarian tumors?
+
+. . .
+
+- We can approach the above <span style="color: purple;">descriptive</span> inquiry via some <span style="color: purple;">data wrangling</span> and <span style="color: purple;">exploratory data analysis (EDA)</span>.
+
+#### <span style="color: darkblue;">Some simulated data</span>
+
+<br>
+
+```{r}
+#| echo: false
+
+ovarian_dataset <- tribble(
+  ~ID, ~Radius, ~Texture, ~Perimeter, ~Area, ~Smoothness,
+  926125, 1.9275296, 1.3485941, 2.1001278, 1.9667039, 0.9627130,
+  926424, 2.1091388, 0.7208383, 2.0589739, 2.3417954, 1.0409262,
+  926682, 1.7033556, 2.0833009, 1.6145108, 1.7223261, 0.1023682,
+  926954, 0.7016669, 2.0437755, 0.6720844, 0.5774446, -0.8397450,
+  927241, 1.8367249, 2.3344032, 1.9807813, 1.7336925, 1.5244257,
+  92751, -1.8068114, 1.2207179, -1.8127934, -1.3466044, -3.1093489
+)
+
+ovarian_dataset <- kable(ovarian_dataset,
+  align = "cccccc"
+) %>%
+  kable_styling(font_size = 33)
+ovarian_dataset
+```
+
+### <span style="color: darkblue;">4.5. Some key notes</span>
+
+- <span style="color: purple;">Identifying</span> whether there is a <span style="color: purple;">response variable</span> is important!
+- The kind of response variable/target is critical <span style="color: purple;">for narrowing down the method</span>.
+- The explanatory variables/predictors/features are also important, but we consider these after the response variable.
+
+### <span style="color: darkblue;">4.6. A question for you!</span>
+
+- Write down one statistical question you are trying to answer with your research.
+- Identify the type of question it is.
+
+![](img/crab.png){fig-align="center" width=70%}
+
+## <span style="color: darkblue;">5. The statistical landscape in `R`</span>
+
+- Let us check the [{tidyverse}](https://www.tidyverse.org/) collection of `R` packages designed for data science.
+
+![](img/software.png){fig-align="center" height=350}
+
+## <span style="color: darkblue;">6. Example of an inferential analysis in R</span>
+
+> Is sexual activity associated with the longevity of male fruit flies?
+
+<br>
+
+**What kind of question is this?**
+
+. . .
+
+<span style="color: purple;">Inferential!</span>
+
+## <span style="color: darkblue;">6.1. Data</span>
+
+- Fruit flies were divided <span style="color: purple;">randomly</span> into groups of 13 each. 
+- The <span style="color: purple;">response</span> was the longevity of the fruit fly in days. 
+- One group was kept solitary (`isolated`), while another was given 8 virgin females per day (`high`).
+
+. . .
+
+- We will use two `R` libraries: <span style="color: purple;">{tidyverse}</span> and <span style="color: purple;">{faraway}</span> (where the data is available).
+
+```{r}
+#| echo: true
+
+library(tidyverse)
+library(faraway)
+```
+
+
+### <span style="color: darkblue;">Data wrangling</span>
+
+```{r}
+#| echo: true
+
+fruitfly_data <- fruitfly |> 
+  select(longevity, activity) |> 
+  filter(activity == c("isolated", "high")) |> 
+  mutate(activity = fct_drop(activity))
+
+head(fruitfly_data)
+tail(fruitfly_data)
+```
+
+## <span style="color: darkblue;">6.2. So how should we analyze this data?</span>
+
+- What is our <span style="color: purple;">response variable</span>? What kind of data is it?
+
+. . .
+
+> The response is variable `longevity`, and it is <span style="color: purple;">numeric</span>.
+
+. . .
+
+- What is our <span style="color: purple;">explanatory variable</span>? What kind of data is it?
+
+. . .
+
+> The response is variable `activity`, and it is <span style="color: purple;">categorical</span>.
+
+### <span style="color: darkblue;">What is a suitable statistical test?</span>
+
+- A <span style="color: purple;">$t$-test</span> is suitable here (as would be a <span style="color: purple;">permutation test for difference of means OR medians</span>, or a <span style="color: purple;">Mann Whitney U Test</span>).
+
+. . .
+
+- To perform this, we need to parameterize our null ($H_0$) and alternative hypotheses ($H_A$):
+
+. . .
+
+\begin{gather*}
+H_0: \text{There is no difference in mean longevity of sexually} \\
+\text{active and non-sexually active male fruit flies.} \\
+H_A: \text{There is difference in mean longevity of sexually} \\
+\text{active and non-sexually active male fruit flies.}
+\end{gather*}
+
+### <span style="color: darkblue;">Always start with a visualization</span>
+
+- The visualization should be related to your question!
+- It should complement your statistical method(s).
+- We are interested in <span style="color: purple;">means; population means</span>!
+
+. . .
+
+- So here, we should visualize our estimates of the population means, as well as our <span style="color: purple;">uncertainty</span> about them!
+
+![](img/plots.png){fig-align="center" height=200}
+
+### <span style="color: darkblue;">Visualizing estimates and their uncertainty</span>
+
+1. <span style="color: purple;">Calculate</span> estimates and uncertainty.
+2. <span style="color: purple;">Visualize</span> estimates and uncertainty, communicating as much about the underlying sample data as possible!
+
+![](img/plots.png){fig-align="center" height=300}
+
+### <span style="color: darkblue;">Calculate estimates and uncertainty</span>
+
+- We calculate the <span style="color: purple;">sample means</span> and <span style="color: purple;">95% confidence interval (CI)</span> for a mean using the $t$-distribution, assuming independence and the <span style="color: purple;">Central Limit Theorem (CLT)</span>.
+
+### <span style="color: darkblue;">Code</span>
+
+```{r}
+#| echo: true
+
+fruitfly_2_estimates <- fruitfly_data |>
+  group_by(activity) |>
+  summarise(
+    mean = mean(longevity),
+    n = n(),
+    se = sd(longevity) / sqrt(n()),
+    df = n - 1,
+    t_star = qt(0.975, df),
+    lower = mean - t_star * se,
+    upper = mean + t_star * se
+  )
+fruitfly_2_estimates
+```
+
+### <span style="color: darkblue;">Visualization</span>
+
+```{r}
+#| echo: true
+
+fruitfly_2_estimates_viz <- ggplot(fruitfly_data, aes(x = activity, y = longevity)) +
+  geom_jitter(width = 0.1, size = 2, alpha = 0.2) +
+  geom_errorbar(
+    data = fruitfly_2_estimates,
+    mapping = aes(
+      x = activity,
+      y = mean,
+      ymin = lower,
+      ymax = upper
+    ),
+    width = 0.15, colour = "blue", linewidth = 1
+  ) +
+  stat_summary(
+    fun = mean,
+    geom = "point", shape = 18,
+    size = 4, color = "orange"
+  ) +
+  ylim(c(0, 100)) +
+  ylab("Longevity (days)") +
+  xlab("Sexual Activity") +
+  theme_bw() +
+  theme(text = element_text(size = 22))
+```
+
+### <span style="color: darkblue;">The plot</span>
+
+```{r}
+#| echo: false
+#| fig-width: 11.5
+#| fig-height: 7
+
+fruitfly_2_estimates_viz
+```
+
+### <span style="color: darkblue;">Running the test</span>
+
+- We run a <span style="color: purple;">two sample $t$-test</span> assuming <span style="color: purple;">unequal population variances</span>.
+
+```{r}
+#| echo: true
+
+fruitfly_2_ttest <- t.test(longevity ~ activity, alternative = "two.sided",
+  data = fruitfly_data, var.equal = FALSE
+)
+fruitfly_2_ttest
+```
+
+### <span style="color: darkblue;">How do we parse this output?</span>
+
+- Let us use library <span style="color: purple;">{broom}</span>.
+
+```{r}
+#| echo: true
+library(broom)
+fruitfly_2_ttest_tidy <- tidy(fruitfly_2_ttest)
+fruitfly_2_ttest_tidy
+```
+
+### <span style="color: darkblue;">What are our conclusions?</span>
+
+::: incremental
+- The male fruit flies which were not sexually active were observed to have an increased lifespan (<span style="color: purple;">they lived `r round(fruitfly_2_ttest_tidy$estimate, 0)` days longer</span>).
+- Specifically, the male fruit flies <span style="color: purple;">which were not sexually active</span> had a mean lifespan of `r round(fruitfly_2_ttest_tidy$estimate1, 0)` days with a 95% CI of <span style="color: purple;">[`r round(fruitfly_2_estimates$lower[1], 0)`, `r round(fruitfly_2_estimates$upper[1], 0)`]</span>.
+- On the other hand, male fruit flies <span style="color: purple;">which were sexually active</span> had a mean lifespan of `r round(fruitfly_2_ttest_tidy$estimate2, 0)` days with a 95% CI of <span style="color: purple;">[`r round(fruitfly_2_estimates$lower[2], 0)`, `r round(fruitfly_2_estimates$upper[2], 0)`]</span>.
+:::
+
+### <span style="color: darkblue;">Then...</span>
+
+::: incremental
+- Carrying out a <span style="color: purple;">$t$-test (assuming independence and the CLT)</span> with significance level $\alpha = 0.05$, indicated that we have enough statistical evidence to reject our null hypothesis $H_0$ (in favour of the alternative, $H_A$) as our $p$-value < 0.001 was much smaller than $\alpha$.
+- Therefore, <span style="color: purple;">we can conclude there is a difference in the male fruit fly lifespan when males are sexually active compared to when they are not</span>.
+:::
+
+### <span style="color: darkblue;">Finally...</span>
+
+- Due to the <span style="color: purple;">randomized experimental design</span>, we might also suggest that this effect of sexual activity is causal on the change in lifespan! 
+- **Specifically, sexual activity in male fruit flies decreases lifespan.**
+
+## <span style="color: darkblue;">7. Summary</span>
+
+::: incremental
+1. Identify the <span style="color: purple;">kind of question</span>.
+2. <span style="color: purple;">Look</span> at the data.
+3. Identify a <span style="color: purple;">suitable statistical or machine learning method</span> for your question and data.
+4. Create a <span style="color: purple;">visualization<span>.
+5. <span style="color: purple;">Apply</span> your statistical or machine learning method.
+6. Maybe, <span style="color: purple;">create another visualization</span>.
+7. <span style="color: purple;">Interpret and communicate</span> your assumptions and results.
+:::
+
+## <span style="color: darkblue;">Extra Resources</span>
+
+- Fully developed MDS Public course materials:
+  + [DSCI 551: Descriptive Statistics and Probability for Data Science](https://ubc-mds.github.io/DSCI_551_stat-prob-dsci/README.html); it provides the <span style="color: purple;">fundamentals of probability</span> (on which statistical inference is built upon).
+  + [DSCI 562: Regression II](https://ubc-mds.github.io/DSCI_562_regr-2/README.html); it provides material on <span style="color: purple;">advanced regression techniques</span>.
+  + [DSCI 554: Experimentation and Causal Inference](https://ubc-mds.github.io/DSCI_554_exper-causal-inf/README.html); it provides the fundamentals of <span style="color: purple;">causal inference</span> via <span style="color: purple;">experimental and observational studies</span>.
+  
+## <span style="color: darkblue;">Extra Resources</span>
+
+- In development:
+  + [The Mini Test Book:](https://pnickchi.github.io/test-book/) A handbook on different <span style="color: purple;">hypothesis testings</span> via <span style="color: purple;">different mind maps</span>. It is an **Open Educational Resource (OER)**.
+  + [The Regression Cookbook](https://alexrod61.github.io/regression-cookbook/) Another **OER** which aims to provide comprehensive "*recipes*" of <span style="color: purple;">different regression models</span>.
+  + [Incorporating Causal Inference in Statistics Courses:](https://alexrod61.github.io/cancots-2025-causal-inf-deliverable/) A comprehensive list of <span style="color: purple;">further scholar resources</span> on more <span style="color: purple;">advanced causal inference</span>.
+
+## <span style="color: darkblue;">Questions?</span>
+
+![](img/panda.png){fig-align="center" height=300}
+
+> All the source files of these slides are in this public GitHub repo: [https://github.com/alexrod61/MEDI504-basic-biostats-2024](https://github.com/alexrod61/MEDI504-basic-biostats-2025).
+
+## <span style="color: darkblue;">Reference</span>
+
+- Wolberg,W.H., and Mangasarian,O.L. (1990). *Multisurface method of pattern separation for medical diagnosis applied to breast cytology*. In Proceedings of the National Academy of Sciences, 87, 9193-9196.
