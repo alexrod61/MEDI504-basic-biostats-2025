@@ -5,11 +5,17 @@ project:
 website:
   title: "The University of British Columbia"
   repo-url: https://github.com/alexrod61/MEDI504-basic-biostats-2024
+  repo-branch: main
   repo-actions: [source]
   navbar:
     left:
       - href: index.qmd
         text: Home
+    right:
+      - icon: github
+        href: https://github.com/alexrod61/MEDI504-basic-biostats-2024
+        aria-label: GitHub
+        text: Go back to GitHub repository
 
   sidebar:
     style: "docked"
