@@ -4,7 +4,7 @@ project:
 
 website:
   title: "The University of British Columbia"
-  repo-url: https://github.com/alexrod61/MEDI504-basic-biostats-2024
+  repo-url: https://github.com/alexrod61/MEDI504-basic-biostats-2025
   repo-branch: main
   repo-actions: [source]
   navbar:
@@ -13,7 +13,7 @@ website:
         text: Home
     right:
       - icon: github
-        href: https://github.com/alexrod61/MEDI504-basic-biostats-2024
+        href: https://github.com/alexrod61/MEDI504-basic-biostats-2025
         aria-label: GitHub
         text: Go back to GitHub repository
 
