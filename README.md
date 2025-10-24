@@ -19,4 +19,4 @@ By the end of this module, students should be able to:
 - Use the `R` programming language to carry out analysis to answer inferential questions.
 - **Interpret and communicate the results** of the analysis from an inferential question.
 
-> This website contains a [**Quarto presentation**](https://alexrod61.github.io/MEDI504-basic-biostats-2025/slides/MEDI504-basic-biostats-2024.html#/title-slide).
+> This website contains a [**Quarto presentation**](https://alexrod61.github.io/MEDI504-basic-biostats-2025/slides/MEDI504-basic-biostats-2025.html#/title-slide).
