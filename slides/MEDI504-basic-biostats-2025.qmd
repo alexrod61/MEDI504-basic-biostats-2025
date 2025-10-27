@@ -149,6 +149,54 @@ By the end of this module, you should be able to:
 
 ![](img/robot.png){fig-align="center" height=300}
 
+### <span style="color: darkblue;">Challenge 1</span>
+
+- What kind of statistical question is this?
+
+> Is a yet undiagnosed patient's breast cancer tumor malignant or benign?
+
+. . .
+
+**Answer:**
+
+> It is <span style="color: purple;">predictive</span>. Given some observed previous data, we would need <span style="color: purple;">to train a statistical or machine learning model</span> and use the modelling estimates to deliver a <span style="color: purple;">diagnosis prediction</span> conditioned on the patient characteristics.
+
+### <span style="color: darkblue;">Challenge 2</span>
+
+- What kind of statistical question is this?
+
+> Is inhalation of marijuana associated with lung cancer?
+
+. . .
+
+**Answer:**
+
+> It is <span style="color: purple;">inferential</span> since the question above aims to quantify an <span style="color: purple;">association</span> between two variables of interest: inhaling marijuana versus lung cancer (both are binary, i.e., **yes** or **no**).
+
+### <span style="color: darkblue;">Challenge 3</span>
+
+- What kind of statistical question is this?
+
+> Does a truncation of the BRCA2 gene cause cancer?
+
+. . .
+
+**Answer:**
+
+> It is <span style="color: purple;">causal</span>, not just because of the word "*cause*" but also for the <span style="color: purple;">context of the question</span>. A gene truncation involves <span style="color: purple;">an experimental study</span> to check whether there is an outcome from this study: <span style="color: purple;">cancer appearance</span>.
+
+### <span style="color: darkblue;">Challenge 4</span>
+
+- What kind of statistical question is this?
+
+> Are there sub-types of ovarian tumors?
+
+. . .
+
+**Answer:**
+
+> It is <span style="color: purple;">descriptive</span>. We merely seek to <span style="color: purple;">summarize</span> a given information in our dataset, which might be contained in a column called `Type of Ovarian Tumor`. That said, we are not seeking to make <span style="color: purple;">any further interpretations</span> on these summarized data in the context of this inquiry.
+
 ## <span style="color: darkblue;">3. So you know the type of question...</span>
 
 <br>
